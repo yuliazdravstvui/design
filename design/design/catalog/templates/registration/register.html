@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Регистрация></h1>> <form method="post">
+<h1>Регистрация</h1> <form method="post">
 {{ form.as_p}}
 {% csrf_token %}
 <button
@@ -19,15 +19,15 @@ class="btn btn-primary">
         errors.classList.add('errorList');
         if (res.is_taken) {
             errors.innerHTML += '<li>Данный логин занят</li>';
-            }
+        }
         if (event.target.value.length === 0) {
             errors.innerHTML += '<li>Логин не может быть пустым</li>';
-            }
+        }
         const re = new RegExp("^[a-zA-Z0-9-]+$");
         if (!re.test(event.target.value)) {
             errors.innerHTML += '<li>Разрешены только латиница, цифры или тире</li>';
-            }
+        }
             event.target.parentNode.prepend(errors);
-        })
+    })
 </script>
 {% endblock %}

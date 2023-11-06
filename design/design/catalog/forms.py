@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from .models import CustomUser
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django import forms
@@ -7,16 +7,21 @@ from .validators import validate_password_len
 
 
 class RegisterUserForm(forms.ModelForm):
+    name = forms.CharField(label='Имя',
+                               validators=[RegexValidator('^[а-яА-Я- -]+$',
+                                                          message="Разрешены только кириллица, дефис и пробелы")],
+                               error_messages={'required': 'Обязательное поле',
+                                               })
     username = forms.CharField(label='Логин',
-                               validators = [RegexValidator('^[a-zA-Z0-9-]+$',
+                               validators=[RegexValidator('^[a-zA-Z0-9-]+$',
                                                             message="Разрешены только латиница, цифры или тире")],
-                               error_messages = {'required' : 'Обязательное поле',
+                               error_messages={'required' : 'Обязательное поле',
                                                'unique' : 'Данный логин занят'
                                                })
     email = forms.EmailField(label='Адрес электронной почты',
-                              error_messages = {
-                                  'invalid' : 'Неправильный формат адреса',
-                                  'unique' : 'Данный адрес занят'
+                              error_messages={
+                                  'invalid': 'Неправильный формат адреса',
+                                  'unique': 'Данный адрес занят'
                               })
     password = forms.CharField(label='Пароль',
                                widget = forms.PasswordInput,
@@ -25,8 +30,8 @@ class RegisterUserForm(forms.ModelForm):
                                    'required': ' Обязательное поле',
                                })
     password2 = forms.CharField(label='Пароль(Повторно)',
-                               widget = forms.PasswordInput,
-                               error_messages = {
+                               widget=forms.PasswordInput,
+                               error_messages={
                                     'required': ' Обязательное поле',
                                 })
     rules = forms.BooleanField(required=True,
@@ -52,5 +57,5 @@ class RegisterUserForm(forms.ModelForm):
         return user
 
     class Meta:
-        model = User
-        fields =  ('username', 'email', 'password', 'password2', 'rules')
+        model = CustomUser
+        fields = ('name', 'username', 'email', 'password', 'password2', 'rules')

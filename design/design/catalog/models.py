@@ -1,17 +1,19 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.validators import FileExtensionValidator
+
 
 # Create your models here.
 
 
-class User (models.Model):
-    username= models.CharField(max_length=254, verbose_name='Лoгин', unique=True, blank=False)
+class CustomUser(AbstractUser):
+    username = models.CharField(max_length=254, verbose_name='Лoгин', unique=True, blank=False)
     email = models.CharField(max_length=254, verbose_name='Пoчтa', unique=True, blank=False)
-    password= models.CharField(max_length=254, verbose_name='Пapoль', blank=False)
+    password = models.CharField(max_length=254, verbose_name='Пapoль', blank=False)
     role = models.CharField(max_length=254, verbose_name='Роль',
                             choices=(('admin', 'Администратор'), ('user', 'Пoльзователь')), default='user')
 
-class Category (models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=254, verbose_name='Нaименование', blank=False)
     def __str__(self):
         return self.name
@@ -30,4 +32,4 @@ class Application(models.Model):
                                    validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'bmp'])])
     status = models.CharField(max_length=254, verbose_name='Статус', choices=STATUS_CHOICES, default='N')
     date = models.DateTimeField(verbose_name='Дата добавления', auto_now_add=True)
-    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, verbose_name='Пользователь', on_delete=models.CASCADE)

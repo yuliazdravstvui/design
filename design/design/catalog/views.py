@@ -22,7 +22,7 @@ class RegisterView(CreateView):
     form_class = RegisterUserForm
     success_url = reverse_lazy('login')
 
-def validate_username (request):
+def validate_username(request):
     username = request.GET.get('username', None)
     response = {
         'is_taken': User.objects.filter(username__iexact=username).exists()
