@@ -28,7 +28,7 @@
   <ul class="sidebar-nav">
    {% if user.is_authenticated %}
      <li>User: {{ user.get_username }}</li>
-     <li><a href="">Мои заявки</a></li>
+     <li><a href="{% url 'profile' %}">Личный кабинет</a></li>
      <li><a href="{% url 'logout' %}?next={{request.path}}">Выйти</a></li>
    {% else %}
      <li><a href="{% url 'login' %}?next={{request.path}}">Войти</a></li>
@@ -50,6 +50,20 @@
   </div>
   <div class="col-sm-10 ">
 
+      {% if user.is_authenticated %}
+        {% if application_list %}
+        <h1>Список заявок</h1>
+
+      {% for ap in application_list %}
+            <ul>
+                <li>{{ap.date}}</li>
+                <li><a href="{{application.get_absolute_url }}"> {{ap.name}}</a> ({{ap.category}})</li>
+                <img src="{{ ap.photo_file.url}}">
+            </ul>
+            {% endfor %}
+          {% endif %}
+      {% endif %}
+
 
   {% block pagination %}
     {% if is_paginated %}
@@ -68,11 +82,9 @@
         </div>
     {% endif %}
   {% endblock %}
-
-
   </div>
 </div>
-
 </div>
+
 </body>
 </html>

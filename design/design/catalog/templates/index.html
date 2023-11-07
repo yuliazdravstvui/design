@@ -1,8 +1,15 @@
 {% extends "base.html" %}
-
 {% block content %}
-<h1>Design.pro Home</h1>
 
-<p> Добро пожаловать <em>Design.pro</em>, a very basic Django website developed as a <a href="https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Tutorial_local_library_website">tutorial example</a> on the Mozilla Developer Network.</p>
-<p>The tutorial demonstrates how to create a Django skeleton website and application, define URL mappings, views (including Generic List and Detail Views), models and templates.</p>
+<h1>Добро пожаловать на наш портал</h1>
+{% if user.is_authenticated %}
+<h1>Список заявок</h1>
+{% for application in applications %}
+<p>Временная метка:{{ application.date }}</p>
+<p>Название: {{ application.title }}</p>
+<p>Категория: {{ application.category }}</p>
+<p>Фотография: <img src="{{ application.photo_file.url }}"></p>
+
+{% endfor %}
+{% endif %}
 {% endblock %}

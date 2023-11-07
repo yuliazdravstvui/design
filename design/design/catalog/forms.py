@@ -7,7 +7,12 @@ from .validators import validate_password_len
 
 
 class RegisterUserForm(forms.ModelForm):
-    name = forms.CharField(label='Имя',
+    first_name = forms.CharField(label='Фамилия',
+                               validators=[RegexValidator('^[а-яА-Я- -]+$',
+                                                          message="Разрешены только кириллица, дефис и пробелы")],
+                               error_messages={'required': 'Обязательное поле',
+                                               })
+    last_name = forms.CharField(label='Имя',
                                validators=[RegexValidator('^[а-яА-Я- -]+$',
                                                           message="Разрешены только кириллица, дефис и пробелы")],
                                error_messages={'required': 'Обязательное поле',
@@ -58,4 +63,4 @@ class RegisterUserForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('name', 'username', 'email', 'password', 'password2', 'rules')
+        fields = ('first_name', 'last_name', 'username', 'email', 'password', 'password2', 'rules')

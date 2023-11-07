@@ -1,12 +1,18 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.core.validators import FileExtensionValidator
+from django.template.backends import django
+from django.urls import reverse
+
 
 
 # Create your models here.
 
 
 class CustomUser(AbstractUser):
+    first_name = models.CharField(max_length=254, verbose_name='Имя', unique=True, blank=False)
+    last_name = models.CharField(max_length=254, verbose_name='Фамилия', unique=True, blank=False)
     username = models.CharField(max_length=254, verbose_name='Лoгин', unique=True, blank=False)
     email = models.CharField(max_length=254, verbose_name='Пoчтa', unique=True, blank=False)
     password = models.CharField(max_length=254, verbose_name='Пapoль', blank=False)
@@ -25,11 +31,22 @@ class Application(models.Model):
         ('P', 'Принято в работу'),
         ('C', 'Выполнено'),
     ]
-    title = models.CharField(max_length=200)
-    description = models.TextField(max_length=1000, help_text="Enter a brief description of the application")
-    category = models.ManyToManyField(Category, help_text="Select a genre for this application")
-    photo_file = models.ImageField(max_length=254,upload_to='image/',
-                                   validators=[FileExtensionValidator(['jpg', 'jpeg', 'png', 'bmp'])])
+
+    def validate_image(fieldfile_obj):
+        filesize = fieldfile_obj.file.size
+        megabyte_limit = 2.0
+        if filesize > megabyte_limit * 1024 * 1024:
+            raise ValidationError("Max file size is %sMB" % str(megabyte_limit))
+
+    category = models.ForeignKey(Category, help_text='Выберите категорию', on_delete=models.CASCADE)
+    photo_file = models.ImageField(max_length=254, upload_to='image/',
+                                   validators=[validate_image, FileExtensionValidator(['jpg', 'jpeg', 'png', 'bmp'])])
     status = models.CharField(max_length=254, verbose_name='Статус', choices=STATUS_CHOICES, default='N')
-    date = models.DateTimeField(verbose_name='Дата добавления', auto_now_add=True)
+    date = models.DateTimeField(verbose_name='Дата добавления')
     user = models.ForeignKey(CustomUser, verbose_name='Пользователь', on_delete=models.CASCADE)
+
+    def get_absolute_url(self):
+        return reverse('application_leist', args=[str(self.id)])
+
+    def __str__(self):
+        return self.title
