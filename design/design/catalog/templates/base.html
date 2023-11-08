@@ -13,9 +13,8 @@
   {% load static %}
   <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
-<body style="margin-left: 50px;">
+<body >
 
-<div>{% block content %}{% endblock %}</div>
 <div class="container-fluid">
 
 <div class="row">
@@ -85,6 +84,6 @@
   </div>
 </div>
 </div>
-
+<div>{% block content %}{% endblock %}</div>
 </body>
 </html>
