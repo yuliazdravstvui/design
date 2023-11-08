@@ -41,6 +41,7 @@ class ApplicationListView(generic.ListView):
     model = Application
     template_name = 'index.html'
     context_object_name = 'applications'
+    paginate_by = 4
 
 
 class ApplicationsByUserListView(LoginRequiredMixin, generic.ListView):

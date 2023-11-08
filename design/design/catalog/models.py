@@ -11,8 +11,8 @@ from django.urls import reverse
 
 
 class CustomUser(AbstractUser):
-    first_name = models.CharField(max_length=254, verbose_name='Имя', unique=True, blank=False)
-    last_name = models.CharField(max_length=254, verbose_name='Фамилия', unique=True, blank=False)
+    first_name = models.CharField(max_length=254, verbose_name='Имя', blank=False)
+    last_name = models.CharField(max_length=254, verbose_name='Фамилия', blank=False)
     username = models.CharField(max_length=254, verbose_name='Лoгин', unique=True, blank=False)
     email = models.CharField(max_length=254, verbose_name='Пoчтa', unique=True, blank=False)
     password = models.CharField(max_length=254, verbose_name='Пapoль', blank=False)
@@ -26,6 +26,7 @@ class Category(models.Model):
 
 
 class Application(models.Model):
+    title = models.CharField(max_length=254, default="0")
     STATUS_CHOICES = [
         ('N', 'Новая'),
         ('P', 'Принято в работу'),
@@ -38,7 +39,7 @@ class Application(models.Model):
         if filesize > megabyte_limit * 1024 * 1024:
             raise ValidationError("Max file size is %sMB" % str(megabyte_limit))
 
-    category = models.ForeignKey(Category, help_text='Выберите категорию', on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, help_text='Выберите категорию', on_delete=models.CASCADE, default="0")
     photo_file = models.ImageField(max_length=254, upload_to='image/',
                                    validators=[validate_image, FileExtensionValidator(['jpg', 'jpeg', 'png', 'bmp'])])
     status = models.CharField(max_length=254, verbose_name='Статус', choices=STATUS_CHOICES, default='N')

@@ -12,7 +12,7 @@ urlpatterns = [
     path('register', views.RegisterView.as_view(), name='register'),
     path('validate_username', validate_username, name='validate_username'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('profil/', ApplicationsByUserListView.as_view(), name='profil'),
+    path('profile/', ApplicationsByUserListView.as_view(), name='profile'),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
