@@ -1,12 +1,15 @@
+from datetime import *
+from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 from django.views.generic import CreateView
 
 from .forms import RegisterUserForm
+from .forms import ApplicationForm
 from .models import Application
 
 
@@ -51,3 +54,30 @@ class ApplicationsByUserListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return Application.objects.filter(user=self.request.user)
+
+def Application_new(request):
+    if request.method == "POST":
+        form = ApplicationForm(request.POST)
+        if form.is_valid():
+            Application = form.save(commit=False)
+            Application.author = request.user
+            Application.published_date = timezone.now()
+            Application.save()
+            return redirect('Application_detail', pk=Application.pk)
+    else:
+        form = ApplicationForm()
+    return render(request, 'Application_edit.html', {'form': form})
+
+def Application_edit(request, pk):
+    Application = get_object_or_404(Application, pk=pk)
+    if request.method == "POST":
+        form = ApplicationForm(request.POST, instance=Application)
+        if form.is_valid():
+            Application = form.save(commit=False)
+            Application.author = request.user
+            Application.published_date = timezone.now()
+            Application.save()
+            return redirect('post_detail', pk=Application.pk)
+    else:
+        form = ApplicationForm(instance=Application)
+    return render(request, 'Application_edit.html', {'form': form})

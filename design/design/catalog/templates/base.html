@@ -28,6 +28,7 @@
    {% if user.is_authenticated %}
      <li>User: {{ user.get_username }}</li>
      <li><a href="{% url 'profile' %}">Личный кабинет</a></li>
+      <li><a href="{% url 'Application_new' %}">Новая заявка</a></li>
      <li><a href="{% url 'logout' %}?next={{request.path}}">Выйти</a></li>
    {% else %}
      <li><a href="{% url 'login' %}">Войти</a></li>

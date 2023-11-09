@@ -1,4 +1,4 @@
-from .models import CustomUser
+from .models import CustomUser, Application
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django import forms
@@ -64,3 +64,12 @@ class RegisterUserForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ('first_name', 'last_name', 'username', 'email', 'password', 'password2', 'rules')
+
+class ApplicationForm(forms.ModelForm):
+    title = forms.CharField(label='Название проекта', error_messages={'required': 'Обязательное поле'})
+    text = forms.CharField(label='Описанрие проекта', error_messages={'required': 'Обязательное поле'})
+
+    class Meta:
+        model = Application
+        fields = ('title', 'text',)
+

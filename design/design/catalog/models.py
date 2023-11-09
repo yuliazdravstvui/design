@@ -47,7 +47,7 @@ class Application(models.Model):
     user = models.ForeignKey(CustomUser, verbose_name='Пользователь', on_delete=models.CASCADE)
 
     def get_absolute_url(self):
-        return reverse('application_leist', args=[str(self.id)])
+        return reverse('application_list', args=[str(self.id)])
 
     def __str__(self):
         return self.title
