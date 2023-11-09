@@ -60,24 +60,12 @@ def Application_new(request):
         form = ApplicationForm(request.POST)
         if form.is_valid():
             Application = form.save(commit=False)
+            Application.category =
             Application.author = request.user
-            Application.published_date = timezone.now()
+            Application.date = timezone.now()
             Application.save()
             return redirect('Application_detail', pk=Application.pk)
     else:
         form = ApplicationForm()
     return render(request, 'Application_edit.html', {'form': form})
 
-def Application_edit(request, pk):
-    Application = get_object_or_404(Application, pk=pk)
-    if request.method == "POST":
-        form = ApplicationForm(request.POST, instance=Application)
-        if form.is_valid():
-            Application = form.save(commit=False)
-            Application.author = request.user
-            Application.published_date = timezone.now()
-            Application.save()
-            return redirect('post_detail', pk=Application.pk)
-    else:
-        form = ApplicationForm(instance=Application)
-    return render(request, 'Application_edit.html', {'form': form})

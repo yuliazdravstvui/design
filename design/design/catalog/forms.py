@@ -68,6 +68,7 @@ class RegisterUserForm(forms.ModelForm):
 class ApplicationForm(forms.ModelForm):
     title = forms.CharField(label='Название проекта', error_messages={'required': 'Обязательное поле'})
     text = forms.CharField(label='Описанрие проекта', error_messages={'required': 'Обязательное поле'})
+    category =
 
     class Meta:
         model = Application
