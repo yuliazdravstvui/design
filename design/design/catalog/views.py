@@ -49,7 +49,7 @@ class ApplicationListView(generic.ListView):
 
 class ApplicationsByUserListView(LoginRequiredMixin, generic.ListView):
     model = Application
-    template_name = 'profil.html'
+    template_name = 'profile.html'
     context_object_name = 'applications'
 
     def get_queryset(self):
@@ -60,7 +60,6 @@ def Application_new(request):
         form = ApplicationForm(request.POST)
         if form.is_valid():
             Application = form.save(commit=False)
-            Application.category =
             Application.author = request.user
             Application.date = timezone.now()
             Application.save()
@@ -68,4 +67,13 @@ def Application_new(request):
     else:
         form = ApplicationForm()
     return render(request, 'Application_edit.html', {'form': form})
+
+class ApplicationDelete(ApplicationListView):
+    model = Application
+    context_object_name = 'application'
+    template_name = 'delete.html'
+    success_url = reverse_lazy('request')
+
+
+
 

@@ -9,5 +9,7 @@
 <p>Категория: {{application.category}}</p>
 <p>Статус: {{application.status}}</p>
 
+<a href ="{% url 'delete' %}">Удалить</a><br>
+
 {% endfor %}
 {% endblock %}

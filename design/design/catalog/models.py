@@ -1,10 +1,11 @@
+from django import utils
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from django.template.backends import django
 from django.urls import reverse
-
+from django.utils import timezone
 
 
 # Create your models here.
@@ -19,8 +20,10 @@ class CustomUser(AbstractUser):
     role = models.CharField(max_length=254, verbose_name='Роль',
                             choices=(('admin', 'Администратор'), ('user', 'Пoльзователь')), default='user')
 
+
 class Category(models.Model):
     name = models.CharField(max_length=254, verbose_name='Нaименование', blank=False)
+
     def __str__(self):
         return self.name
 
@@ -43,7 +46,7 @@ class Application(models.Model):
     photo_file = models.ImageField(max_length=254, upload_to='image/',
                                    validators=[validate_image, FileExtensionValidator(['jpg', 'jpeg', 'png', 'bmp'])])
     status = models.CharField(max_length=254, verbose_name='Статус', choices=STATUS_CHOICES, default='N')
-    date = models.DateTimeField(verbose_name='Дата добавления')
+    date = models.DateTimeField(verbose_name='Дата добавления', default=utils.timezone.now)
     user = models.ForeignKey(CustomUser, verbose_name='Пользователь', on_delete=models.CASCADE)
 
     def get_absolute_url(self):
